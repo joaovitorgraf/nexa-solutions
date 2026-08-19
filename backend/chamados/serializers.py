@@ -4,6 +4,15 @@ from .models import Chamado
 
 
 class ChamadoSerializer(serializers.ModelSerializer):
+    titulo = serializers.CharField(
+        required=True,
+        allow_blank=False,
+        error_messages={
+            "required": "O título é obrigatório.",
+            "blank": "O título é obrigatório.",
+        },
+    )
+
     class Meta:
         model = Chamado
 
@@ -15,15 +24,6 @@ class ChamadoSerializer(serializers.ModelSerializer):
             "criado_em",
             "atualizado_em",
         ]
-
-        # Falha intencional:
-        # A API aceita criação de chamados sem título.
-        extra_kwargs = {
-            "titulo": {
-                "required": False,
-                "allow_blank": True,
-            },
-        }
 
         read_only_fields = [
             "id",
