@@ -50,6 +50,14 @@ A API estará disponível em:
 http://localhost:8000/api/chamados/
 ```
 
+## Executar os testes
+
+Com o ambiente virtual ativado, execute a partir da pasta `backend`:
+
+```bash
+python manage.py test
+```
+
 ## Observação
 
 A documentação deste projeto está incompleta. A dupla deverá melhorar este arquivo como parte da atividade.

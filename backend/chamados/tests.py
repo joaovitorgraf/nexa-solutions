@@ -5,6 +5,31 @@ from rest_framework.test import APITestCase
 from .models import Chamado
 
 
+class ChamadoCreationTests(APITestCase):
+    def test_cria_chamado_valido(self):
+        response = self.client.post(
+            reverse("chamado-list-create"),
+            {"titulo": "Falha no acesso", "descricao": "Usuário não consegue entrar."},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["titulo"], "Falha no acesso")
+        self.assertEqual(response.data["status"], Chamado.Status.ABERTO)
+        self.assertTrue(Chamado.objects.filter(titulo="Falha no acesso").exists())
+
+    def test_nao_cria_chamado_sem_titulo(self):
+        response = self.client.post(
+            reverse("chamado-list-create"),
+            {"descricao": "Chamado sem título."},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("titulo", response.data)
+        self.assertEqual(Chamado.objects.count(), 0)
+
+
 class ChamadoListFilterTests(APITestCase):
     def setUp(self):
         Chamado.objects.create(titulo="Chamado aberto", status=Chamado.Status.ABERTO)
